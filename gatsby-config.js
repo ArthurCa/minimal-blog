@@ -45,7 +45,29 @@ module.exports = {
             url: `https://arthur.camberlein.fr`,
             target: `_blank`
           },
+          {
+            name: `Blog FR`,
+            url: `https://www.mercisergey.com`,
+            target: `_blank`
+          },
         ],
+      },
+    {
+      resolve: `gatsby-plugin-google-gtag`,
+      options: {
+        // You can add multiple tracking ids and a pageview event will be fired for all of them.
+        trackingIds: [
+          "UA-47705987-3", // Google Analytics / GA
+        ],
+        // This object gets passed directly to the gtag config command
+        // This config will be shared across all trackingIds
+        // This object is used for configuration specific to this plugin
+        pluginConfig: {
+          // Puts tracking script in the head instead of the body
+          head: false,
+          // Setting this parameter is also optional
+          respectDNT: true,
+        },
       },
     },
     {
@@ -86,55 +108,6 @@ module.exports = {
             src: `/android-chrome-512x512.png`,
             sizes: `512x512`,
             type: `image/png`,
-          },
-        ],
-      },
-    },
-    {
-      resolve: `gatsby-plugin-feed`,
-      options: {
-        query: `
-          {
-            site {
-              siteMetadata {
-                title: siteTitle
-                description: siteDescription
-                siteUrl
-                site_url: siteUrl
-              }
-            }
-          }
-        `,
-        feeds: [
-          {
-            serialize: ({ query: { site, allPost } }) =>
-              allPost.nodes.map((post) => {
-                const url = site.siteMetadata.siteUrl + post.slug
-                const content = `<p>${post.excerpt}</p><div style="margin-top: 50px; font-style: italic;"><strong><a href="${url}">Keep reading</a>.</strong></div><br /> <br />`
-
-                return {
-                  title: post.title,
-                  date: post.date,
-                  excerpt: post.excerpt,
-                  url,
-                  guid: url,
-                  custom_elements: [{ "content:encoded": content }],
-                }
-              }),
-            query: `
-              {
-                allPost(sort: { fields: date, order: DESC }) {
-                  nodes {
-                    title
-                    date(formatString: "MMMM D, YYYY")
-                    excerpt
-                    slug
-                  }
-                }
-              }
-            `,
-            output: `rss.xml`,
-            title: `Minimal Blog - @lekoarts/gatsby-theme-minimal-blog`,
           },
         ],
       },
